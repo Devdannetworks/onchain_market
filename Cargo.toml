@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/onchain_market_backend"
+]
+resolver = "2"
