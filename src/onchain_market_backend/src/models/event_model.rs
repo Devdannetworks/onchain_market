@@ -15,6 +15,18 @@ pub struct Event {
     pub bet_type: BetType,
 }
 
+#[derive(Eq, Ord, PartialEq, PartialOrd, candid::CandidType, Clone, Deserialize, Serialize)]
+pub struct EventPayload {
+    title: String,
+    description: String,
+    category: String,
+    sub_category: String,
+    amount_staked: u64,
+    outcome: Vec<Outcome>,
+    close_time: String,
+    bet_type: BetType,
+}
+
 #[derive(Eq, Ord, PartialEq, PartialOrd, candid::CandidType, Clone, Serialize, Deserialize)]
 pub enum BetType {
     Binary,

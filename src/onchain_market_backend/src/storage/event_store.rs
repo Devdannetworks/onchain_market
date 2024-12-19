@@ -1,43 +1,64 @@
 use crate::models::events::Event;
 use ic_stable_structures::StableBTreeMap;
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
-use ic_stable_structures::DefaultMemoryImpl;
+use ic_stable_structures::{DefaultMemoryImpl, Storable};
+use ic_stable_structures::IdCell;
 use std::cell::RefCell;
 
+//My alias types
+type Memory = VirtualMemory<DefaultMemoryImpl>;
+type IdCell = Cell<u64, Memory>;
+
+//Implement STorable and BoundedStorable for Event
+impl Storable for Event {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Encode!(self).map(Cow::Owned).expect("Failed to encode Event")
+    }
+    fn from_bytes(bytes: Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).expect("Failed to decode Event")
+    }
+}
+
+impl BoundedStorable for Event {
+    const IS_FIXED_SIZE: bool = false;
+    const MAX_SIZE: u32 = 1024;
+}
+
+//Define my global variables
 thread_local! {
     static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(MemoryManager::init(DefaultMemoryImpl::default()));
     static EVENT_ID_COUNTER: RefCell<IdCell> = RefCell::new(IdCell::init(
         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 0
     ).expect("Failed to initialize EVENT_ID_COUNTER"));
-    static EVENT_STORAGE: RefCell<StableBTreeMap<u64, Event, Memory>> = RefCell::new(StableBTreeMap::init(
+    static EVENT_STORAGE: RefCell<StableBTreeMap<u64, Event, VirtualMemory<DefaultMemoryImpl>>> = RefCell::new(StableBTreeMap::init(
         MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(1)))
     ));
 }
+
 
 pub fn get_event_storage() -> &'static RefCell<StableBTreeMap<u64, Event, VirtualMemory<DefaultMemoryImpl>>> {
     &EVENT_STORAGE
 }
 
-pub fn increment_event_id_counter () -> Result<u64, String> {
-    let id = EVENT_ID_COUNTER.with(|counter| {
+pub fn increment_event_id_counter() -> Result<u64, String> {
+    EVENT_ID_COUNTER.with(|counter| {
         let mut counter = counter.borrow_mut();
         let current_value = *counter.get();
-        match counter.set(current_value + 1) {
-            Ok(_) => Ok(current_value),
-            Err(_) => Err("Failed to increment EVENT_ID_COUNTER".to_string()),
-        }
-    }).map_err(|e| e)?;
-    Ok(id)
+        counter.set(current_value + 1).map_err(|_| "Failed to increment EVENT_ID_COUNTER".to_string())?;
+        Ok(current_value + 1)
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::events::{Event, EventStatus};
+    use crate::models::events::{Event, EventStatus, BetType};
 
     #[test]
     fn test_storage_insert_and_retrieve() {
         let storage = get_event_storage();
+        storage.with(|s| s.borrow_mut().clear()); // Clear the storage before the test
+
         let event = Event {
             event_id: 1,
             title: "Test Event".to_string(),
@@ -51,11 +72,20 @@ mod tests {
             outcome: vec![],
             close_time: "2024-12-31T23:59:59Z".to_string(),
             bets: None,
-            bet_type: crate::models::events::BetType::Binary,
+            bet_type: BetType::Binary,
         };
+
         storage.with(|s| s.borrow_mut().insert(event.event_id, event.clone()));
+
         let retrieved = storage.with(|s| s.borrow().get(&1).cloned());
         assert!(retrieved.is_some());
         assert_eq!(retrieved.unwrap().title, "Test Event");
+    }
+
+    #[test]
+    fn test_increment_event_id_counter() {
+        let id1 = increment_event_id_counter().expect("Failed to increment counter");
+        let id2 = increment_event_id_counter().expect("Failed to increment counter");
+        assert_eq!(id1 + 1, id2);
     }
 }
