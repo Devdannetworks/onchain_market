@@ -30,6 +30,7 @@ type EventPayload = record {
   amount_staked : nat64;
   close_time : text;
   description : text;
+  created_at : nat64;
   category : text;
   bet_type : BetType;
   outcome : vec Outcome;
@@ -41,14 +42,13 @@ type Outcome = record {
   description : text;
   total_bets : nat64;
 };
-type Result = variant { Ok : Event; Err : Error };
-type Result_1 = variant { Ok : opt Event; Err : text };
+type Result = variant { Ok : Event; Err : text };
+type Result_1 = variant { Ok : Event; Err : Error };
 service : {
-  _get_an_event : (nat64) -> (Result) query;
-  create_event : (EventPayload) -> (Result_1);
-  delete : (nat64, principal) -> (Result) query;
+  create_event : (EventPayload) -> (Result);
+  delete_event : (nat64, principal) -> (Result_1);
+  get_an_event : (nat64) -> (Result_1) query;
   list_all_events : () -> (vec Event) query;
   list_events_by_category : (text) -> (vec Event) query;
-  list_popular_events : () -> (vec Event) query;
-  update_event : (nat64, EventPayload) -> (Result);
+  update_event : (nat64, EventPayload) -> (Result_1);
 }

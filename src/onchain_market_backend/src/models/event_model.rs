@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::models::bet_model::{BetPayload, BetType};
+use serde::{Deserialize, Serialize};
 
 #[derive(Eq, Ord, PartialEq, PartialOrd, candid::CandidType, Clone, Serialize, Deserialize)]
 pub struct Event {
@@ -28,6 +28,7 @@ pub struct EventPayload {
     pub outcome: Vec<Outcome>,
     pub close_time: String,
     pub bet_type: BetType,
+    pub created_at: u64,
 }
 
 #[derive(Eq, Ord, PartialEq, PartialOrd, candid::CandidType, Clone, Serialize, Deserialize)]
@@ -38,10 +39,10 @@ pub enum EventStatus {
 }
 #[derive(Eq, Ord, PartialEq, PartialOrd, candid::CandidType, Clone, Deserialize, Serialize)]
 pub struct Outcome {
-    id: u64,
-    description: String,
-    odds: u64,
-    total_bets: u64,
+    pub id: u64,
+    pub description: String,
+    pub odds: u64,
+    pub total_bets: u64,
 }
 
 #[cfg(test)]

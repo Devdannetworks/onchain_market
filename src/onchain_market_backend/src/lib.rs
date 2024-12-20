@@ -1,9 +1,11 @@
 pub mod handlers;
+pub mod models;
 pub mod storage;
 pub mod utils;
-pub mod models;
 
-
+use crate::models::event_model::{Event, EventPayload};
+use crate::utils::errors::Error;
+use candid::Principal;
 use ic_cdk;
 
 //Generate the .did file content
