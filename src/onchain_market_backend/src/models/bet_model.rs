@@ -11,8 +11,8 @@ pub struct BetPayload {
 
 #[derive(Eq, Ord, PartialEq, PartialOrd, CandidType, Clone, Deserialize, Serialize)]
 pub enum BetType {
-    pub Binary,
-    pub Multichoice,
+     Binary,
+     Multichoice,
 }
 
 

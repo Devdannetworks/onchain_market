@@ -1,9 +1,9 @@
-use crate::models::events::Event;
-use ic_stable_structures::StableBTreeMap;
+use crate::models::event_model::Event;
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
-use ic_stable_structures::{DefaultMemoryImpl, Storable};
-use ic_stable_structures::IdCell;
+use ic_stable_structures::{Cell, DefaultMemoryImpl, Storable, BoundedStorable, StableBTreeMap};
 use std::cell::RefCell;
+use candid::{Decode, Encode};
+use std::borrow::Cow;
 
 //My alias types
 type Memory = VirtualMemory<DefaultMemoryImpl>;
@@ -52,12 +52,12 @@ pub fn increment_event_id_counter() -> Result<u64, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::events::{Event, EventStatus, BetType};
+    use crate::models::event_model::{Event, EventStatus, BetType};
 
     #[test]
     fn test_storage_insert_and_retrieve() {
         let storage = get_event_storage();
-        storage.with(|s| s.borrow_mut().clear()); // Clear the storage before the test
+        s.borrow_mut().clear(); // Clear the storage before the test
 
         let event = Event {
             event_id: 1,
@@ -75,7 +75,7 @@ mod tests {
             bet_type: BetType::Binary,
         };
 
-        storage.with(|s| s.borrow_mut().insert(event.event_id, event.clone()));
+        s.borrow_mut().insert(event.event_id, event.clone());
 
         let retrieved = storage.with(|s| s.borrow().get(&1).cloned());
         assert!(retrieved.is_some());

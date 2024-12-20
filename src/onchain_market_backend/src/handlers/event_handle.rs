@@ -1,12 +1,13 @@
-use crate::models::events::{Event, EventPayload, EventStatus};
-use crate::storage::event::{get_event_storage, increment_event_id_counter};
+use crate::models::event_model::{Event, EventPayload, EventStatus};
+use crate::storage::event_store::{get_event_storage, increment_event_id_counter};
 use crate::utils::errors::Error;
-use ic_cdk::api::time;
+use ic_cdk::api::{time};
+use ic_cdk::api::Principal;
 
 #[ic_cdk::update]
 pub fn create_event(payload: EventPayload) -> Result<Event, String> {
     let storage = get_event_storage();
-    let id = increment_event_id_counter().unwrap()
+    let id = increment_event_id_counter().unwrap();
     let new_event = Event {
         event_id: id, 
         title: payload.title,
@@ -92,7 +93,7 @@ pub fn update_event(id: u64, update_payload: EventPayload) -> Result<Event, Erro
 }
 
 #[ic_cdk::update]
-pub fn delete_event(id: u64, user_id: ic_cdk::export::Principal) -> Result<Event, Error> {
+pub fn delete_event(id: u64, user_id: Principal) -> Result<Event, Error> {
     let storage = get_event_storage();
     storage.with(|s| {
         let mut storage = s.borrow_mut();
@@ -124,7 +125,7 @@ pub fn delete_event(id: u64, user_id: ic_cdk::export::Principal) -> Result<Event
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::events::{BetType, Outcome};
+    use crate::models::event_model::{BetType, Outcome};
 
     #[test]
     fn test_create_event() {
@@ -197,7 +198,7 @@ mod tests {
     #[test]
     fn test_list_all_events() {
         let storage = get_event_storage();
-        storage.with(|s| s.borrow_mut().clear());
+        storage.borrow_mut().clear();
 
         let event1 = Event {
             event_id: 1,
@@ -221,10 +222,10 @@ mod tests {
             ..event1.clone()
         };
 
-        storage.with(|s| {
-            s.borrow_mut().insert(event1.event_id, event1.clone());
-            s.borrow_mut().insert(event2.event_id, event2.clone());
-        });
+        
+        storage.borrow_mut().insert(event1.event_id, event1.clone());
+        storage.borrow_mut().insert(event2.event_id, event2.clone());
+        
 
         let all_events = list_all_events();
         assert_eq!(all_events.len(), 2);

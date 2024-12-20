@@ -1,6 +1,9 @@
-#[derive(candid::CandidType, Clone, Deserialize, Serialize)]
+use candid::{CandidType};
+use serde::{Deserialize, Serialize};
+
+#[derive(CandidType, Clone, Deserialize, Serialize)]
 pub enum Error {
-    pub NotFound { msg: String },
-    pub Authorization { msg: String },
+     NotFound { msg: String },
+     Authorization { msg: String },
 }
 
