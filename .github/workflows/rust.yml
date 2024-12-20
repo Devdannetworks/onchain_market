@@ -16,7 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+    - name: Start the local replica in the background
+      run: dfx start --background
+    - name: generate the did files
+      run: npm run gen-deploy
+ 
