@@ -9,7 +9,7 @@ use std::cell::RefCell;
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 type IdCell = Cell<u64, Memory>;
 
-//Implement STorable and BoundedStorable for Event
+//Implement Storable and BoundedStorable for Event
 impl Storable for Event {
     fn to_bytes(&self) -> Cow<[u8]> {
         Encode!(self)
@@ -28,12 +28,12 @@ impl BoundedStorable for Event {
 
 //Define my global variables
 thread_local! {
-    static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(MemoryManager::init(DefaultMemoryImpl::default()));
+    static EVENT_MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(MemoryManager::init(DefaultMemoryImpl::default()));
     static EVENT_ID_COUNTER: RefCell<IdCell> = RefCell::new(IdCell::init(
-        MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 0
+        EVENT_MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 0
     ).expect("Failed to initialize EVENT_ID_COUNTER"));
     static EVENT_STORAGE: RefCell<StableBTreeMap<u64, Event, VirtualMemory<DefaultMemoryImpl>>> = RefCell::new(StableBTreeMap::init(
-        MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(1)))
+        EVENT_MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(1)))
     ));
 }
 

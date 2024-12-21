@@ -24,7 +24,6 @@ pub struct EventPayload {
     pub description: String,
     pub category: String,
     pub sub_category: String,
-    pub amount_staked: u64,
     pub outcome: Vec<Outcome>,
     pub close_time: String,
     pub bet_type: BetType,
@@ -43,6 +42,7 @@ pub struct Outcome {
     pub description: String,
     pub odds: u64,
     pub total_bets: u64,
+    pub total_amount: u64,
 }
 
 #[cfg(test)]
