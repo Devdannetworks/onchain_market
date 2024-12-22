@@ -5,12 +5,16 @@ THis is a project aimed to provide a decentralized and open market for people wh
 ## Key Features
 
 1. **Events Management**
+
    - **Create an event:** This is the api that exposes the create an event functionality and save it in stable memory storage
    - **Update an event:** This enables us to update the details of an existing event so long as its not settled
    - **List all events:** An api that lists all events stored
    - **Retrieve a single event:** An api that retrieves the details of a single event given its id
    - **Filter events by category:** View all events satisfying a certain category
    - **Delete an event:** This functionality enables one to delete an event they created so long as its settled
+
+2. **Bets Management**
+   - **Place a bet:** This creates a bet associated with a specific event, the outcome chosen and user_id interacting with the event. It also increments the total_bets and total_amount of that particular outcome
 
 ## Requirements
 

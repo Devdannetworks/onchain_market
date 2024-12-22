@@ -36,13 +36,13 @@ pub enum EventStatus {
     Close,
     Settled,
 }
-#[derive(Eq, Ord, PartialEq, PartialOrd, candid::CandidType, Clone, Deserialize, Serialize)]
+#[derive( Ord, PartialEq, Eq, PartialOrd, candid::CandidType, Clone, Deserialize, Serialize)]
 pub struct Outcome {
-    pub id: u64,
+    pub outcome_id: u64,
     pub description: String,
-    pub odds: u64,
+    pub odds: u32,
     pub total_bets: u64,
-    pub total_amount: u64,
+    pub total_amount_staked: u64,
 }
 
 #[cfg(test)]

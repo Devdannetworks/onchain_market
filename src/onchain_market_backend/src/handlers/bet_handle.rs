@@ -1,46 +1,61 @@
-use crate::storage::event_model::{get_event_storage};
-use crate::models::bet_model::{BetPayload};
-use crate::models::event_model::{EventStatus};
-use crate::utils::errors::Error
+use crate::storage::event_store::get_event_storage;
+use crate::models::bet_model::BetPayload;
+use crate::models::event_model::EventStatus;
+use crate::utils::errors::Error;
 
-fn place_bet (bet_payload: BetPayload ) {
+fn place_bet(bet_payload: BetPayload) -> Result<(), Error> {
     let event_storage_ref = get_event_storage();
 
-    event_storage_ref.with (|s| {
-        if let Some(event)  = s.borrow_mut.get_mut(&bet_payload.event_id){
-            if event.status == EventStatus::settled {
+    event_storage_ref.with(|s| {
+        let  event = s.borrow_mut().get(&bet_payload.event_id).clone();
+
+        if let Some(mut event) = event {
+            if event.event_status == EventStatus::Settled {
                 return Err(Error::Authorization {
-                    msg format!("Event already settled can't place a bet");
+                    msg: format!("Event already settled; can't place a bet"),
                 });
             }
 
-            let outcome = event.outcome.iter_mut().find(|o| o.id = bet_payload.outcome_id).ok_or(Err(Error::NotFound{msg format!("OUtcome with id={} was not found for this event", bet_payload.outcome_id), }));
+            let outcome = event
+                .outcome
+                .iter_mut()
+                .find(|o| o.outcome_id == bet_payload.outcome_id)
+                .ok_or(Error::NotFound {
+                    msg: format!(
+                        "Outcome with id={} was not found for this event",
+                        bet_payload.outcome_id
+                    ),
+                })?;
 
             outcome.total_amount_staked += bet_payload.amount;
             outcome.total_bets += 1;
 
-            event.bets.push(BetPayload {bet_payload.clone()});
-            Ok(())
+            if let Some(bets) = event.bets.as_mut() {
+                bets.push(bet_payload.clone());
+            } else {
+                event.bets = Some(vec![bet_payload.clone()]);
+            }
 
+            s.borrow_mut().insert(bet_payload.event_id, event.clone());
+            Ok(())
         } else {
-            Err(Error::NotFound{
-                msg format!("Event with id = {} not found!", bet_payload.event_id),
+            Err(Error::NotFound {
+                msg: format!("Event with id={} not found!", bet_payload.event_id),
             })
         }
-
-
     })
 }
-
-
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::model::event_model::{EventStatus};
-    use crate::storage::event_storage::{get_event_storage};
+    use crate::models::event_model::{ Event, EventStatus, Outcome};
+    use crate::models::bet_model::{BetType};
+    use crate::storage::event_store::get_event_storage;
+    use candid::Principal;
 
-    #test test_place_bet () {
+    #[test]
+    fn test_place_bet() {
         let event = Event {
             event_id: 1,
             title: "Sample Event".to_string(),
@@ -52,28 +67,28 @@ mod tests {
             sub_category: "Basketball".to_string(),
             event_status: EventStatus::Open,
             outcome: vec![
-                {
-                    id: 0,
+                Outcome {
+                    outcome_id: 0,
                     description: "Raila wins".to_string(),
-                    odds: 2.5,
+                    odds: 2,
                     total_bets: 0,
                     total_amount_staked: 0,
                 },
-                {
-                    id: 1,
-                    description: "Mahmound wins".to_string(),
+                Outcome {
+                    outcome_id: 1,
+                    description: "Mahmoud wins".to_string(),
                     odds: 2,
                     total_bets: 0,
                     total_amount_staked: 0,
                 },
             ],
             close_time: "2024-12-31T23:59:59Z".to_string(),
-            bets: None,
+            bets: Some(vec![]),
             bet_type: BetType::Binary,
         };
 
         let bet_payload = BetPayload {
-            user_id: Principal,
+            user_id: Principal::anonymous(),
             event_id: 1,
             outcome_id: 1,
             amount: 100,
@@ -81,21 +96,26 @@ mod tests {
 
         let event_storage = get_event_storage();
         event_storage.with(|s| {
-            s.borrow_mut().insert(event.event_id, event)
+            s.borrow_mut().insert(event.event_id, event);
         });
 
         let result = place_bet(bet_payload);
-
         assert!(result.is_ok());
 
-        let updated_event = event_storage.with(|s| s.borrow().get(&1).except("Faile to retrieve updated event").clone());
-        assert_eq!(update_event.bets.len(), 1);
-        assert_eq!(updated_event.bets[1].amount, 100);
-        assert_eq!(update_event.outcome[1].total_amount_staked, 100);
-        assert_eq!(update_event.outcome[0].total_amount_staked, 0);
+        let updated_event = event_storage.with(|s| {
+            s.borrow()
+                .get(&1)
+                .expect("Failed to retrieve updated event")
+                .clone()
+        });
 
+        if let Some(bets) = updated_event.bets.as_ref() {
+            assert_eq!(bets.len(), 1);
+            assert_eq!(bets[0].amount, 100);
+        } else {
+            panic!("No bets found");
+        }
+        assert_eq!(updated_event.outcome[1].total_amount_staked, 100);
+        assert_eq!(updated_event.outcome[0].total_amount_staked, 0);
     }
-
 }
-
-

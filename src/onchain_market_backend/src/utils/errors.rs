@@ -5,4 +5,5 @@ use serde::{Deserialize, Serialize};
 pub enum Error {
     NotFound { msg: String },
     Authorization { msg: String },
+    InvalidState {msg: String},
 }

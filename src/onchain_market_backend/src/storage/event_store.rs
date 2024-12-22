@@ -9,7 +9,7 @@ use std::cell::RefCell;
 type Memory = VirtualMemory<DefaultMemoryImpl>;
 type IdCell = Cell<u64, Memory>;
 
-//Implement Storable and BoundedStorable for Event
+// Implement Storable and BoundedStorable for Event
 impl Storable for Event {
     fn to_bytes(&self) -> Cow<[u8]> {
         Encode!(self)

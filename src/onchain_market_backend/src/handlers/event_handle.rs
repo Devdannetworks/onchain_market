@@ -171,19 +171,20 @@ mod tests {
             category: "Sports".to_string(),
             sub_category: "Basketball".to_string(),
             created_at: get_current_time(),
-            amount_staked: 1000,
             outcome: vec![
                 Outcome {
-                    id: 1,
+                    outcome_id: 1,
                     description: "Team A Wins".to_string(),
                     odds: 150,
                     total_bets: 0,
+                    total_amount_staked: 0,
                 },
                 Outcome {
-                    id: 2,
+                    outcome_id: 2,
                     description: "Team B Wins".to_string(),
                     odds: 200,
                     total_bets: 0,
+                    total_amount_staked: 0,
                 },
             ],
             close_time: "2024-12-31T23:59:59Z".to_string(),
