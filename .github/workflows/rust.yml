@@ -1,4 +1,7 @@
-name: onchain_market
+- name: Set up Rust
+  uses: actions/setup-rust@v2
+  with:
+    rust-version: stable
 
 on:
   push:
@@ -17,7 +20,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Rust
-      uses: actions/setup-rust@v1
+      uses: actions/setup-rust@v2  # Updated to v2
       with:
         rust-version: stable
 
@@ -28,12 +31,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # Install npm dependencies (for gen-deploy)
         npm install
 
     - name: Install DFX
       run: |
-        # Install dfx for local replica
         curl -o /tmp/dfx.tar.gz https://github.com/dfinity/sdk/releases/download/0.17.0/dfx-x86_64-linux-0.17.0.tar.gz
         tar -xvzf /tmp/dfx.tar.gz -C /tmp/
         sudo mv /tmp/dfx /usr/local/bin/
@@ -48,12 +49,8 @@ jobs:
       run: npm run gen-deploy
 
     - name: Run tests
-      run: |
-        # Run your tests here (if applicable)
-        # This assumes you're using a testing framework like `cargo test`
-        cargo test
+      run: cargo test  # Assuming you are using cargo to run your Rust tests
 
     - name: Stop dfx
       run: |
-        # Stop the dfx replica
         dfx stop
