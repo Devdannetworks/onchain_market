@@ -1,25 +1,59 @@
-name: Rust
+name: Rust ICP Project Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches:
+      - main
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Run tests
-      run: cargo test --verbose
-    - name: Start the local replica in the background
-      run: dfx start --background
-    - name: generate the did files
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Rust
+      uses: actions/setup-rust@v1
+      with:
+        rust-version: stable
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: |
+        # Install npm dependencies (for gen-deploy)
+        npm install
+
+    - name: Install DFX
+      run: |
+        # Install dfx for local replica
+        curl -o /tmp/dfx.tar.gz https://github.com/dfinity/sdk/releases/download/0.17.0/dfx-x86_64-linux-0.17.0.tar.gz
+        tar -xvzf /tmp/dfx.tar.gz -C /tmp/
+        sudo mv /tmp/dfx /usr/local/bin/
+
+    - name: Start local replica (dfx start)
+      run: |
+        nohup dfx start --background
+        # Wait a few seconds to ensure that dfx has started
+        sleep 5
+
+    - name: Generate .did IDL file
       run: npm run gen-deploy
- 
+
+    - name: Run tests
+      run: |
+        # Run your tests here (if applicable)
+        # This assumes you're using a testing framework like `cargo test`
+        cargo test
+
+    - name: Stop dfx
+      run: |
+        # Stop the dfx replica
+        dfx stop
