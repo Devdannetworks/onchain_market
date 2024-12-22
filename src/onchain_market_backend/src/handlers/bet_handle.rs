@@ -1,13 +1,15 @@
-use crate::storage::event_store::get_event_storage;
 use crate::models::bet_model::BetPayload;
 use crate::models::event_model::EventStatus;
+use crate::storage::event_store::get_event_storage;
 use crate::utils::errors::Error;
+use ic_cdk;
 
+#[ic_cdk::query]
 pub fn place_bet(bet_payload: BetPayload) -> Result<(), Error> {
     let event_storage_ref = get_event_storage();
 
     event_storage_ref.with(|s| {
-        let  event = s.borrow_mut().get(&bet_payload.event_id).clone();
+        let event = s.borrow_mut().get(&bet_payload.event_id).clone();
 
         if let Some(mut event) = event {
             if event.event_status == EventStatus::Settled {
@@ -49,8 +51,8 @@ pub fn place_bet(bet_payload: BetPayload) -> Result<(), Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::event_model::{ Event, EventStatus, Outcome};
-    use crate::models::bet_model::{BetType};
+    use crate::models::bet_model::BetType;
+    use crate::models::event_model::{Event, EventStatus, Outcome};
     use crate::storage::event_store::get_event_storage;
     use candid::Principal;
 

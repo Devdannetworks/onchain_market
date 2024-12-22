@@ -14,7 +14,7 @@ THis is a project aimed to provide a decentralized and open market for people wh
    - **Delete an event:** This functionality enables one to delete an event they created so long as its settled
 
 2. **Bets Management**
-   - **Place a bet:** This creates a bet associated with a specific event, the outcome chosen and user_id interacting with the event. It also increments the total_bets and total_amount of that particular outcome
+   - **Place a bet:** This creates a bet associated with a specific event, the outcome chosen and user_id interacting with the event. It also increments the total_bets and total_amount of that particular outcome.
 
 ## Requirements
 

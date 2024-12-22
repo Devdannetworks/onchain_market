@@ -4,7 +4,7 @@ pub mod storage;
 pub mod utils;
 
 use crate::models::event_model::{Event, EventPayload};
-use crate::models::bet_model::{BetPayload, BetType};
+use crate::models::bet_model::BetPayload;
 use crate::utils::errors::Error;
 use candid::Principal;
 use ic_cdk;
