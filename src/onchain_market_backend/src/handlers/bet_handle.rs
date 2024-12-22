@@ -3,7 +3,7 @@ use crate::models::bet_model::BetPayload;
 use crate::models::event_model::EventStatus;
 use crate::utils::errors::Error;
 
-fn place_bet(bet_payload: BetPayload) -> Result<(), Error> {
+pub fn place_bet(bet_payload: BetPayload) -> Result<(), Error> {
     let event_storage_ref = get_event_storage();
 
     event_storage_ref.with(|s| {

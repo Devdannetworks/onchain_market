@@ -1,13 +1,14 @@
 type BetPayload = record {
   outcome_id : nat64;
   user_id : principal;
-  bet_id : nat64;
   event_id : nat64;
+  amount : nat64;
 };
 type BetType = variant { Binary; Multichoice };
 type Error = variant {
   Authorization : record { msg : text };
   NotFound : record { msg : text };
+  InvalidState : record { msg : text };
 };
 type Event = record {
   sub_category : text;
@@ -27,7 +28,6 @@ type Event = record {
 type EventPayload = record {
   sub_category : text;
   title : text;
-  amount_staked : nat64;
   close_time : text;
   description : text;
   created_at : nat64;
@@ -37,8 +37,9 @@ type EventPayload = record {
 };
 type EventStatus = variant { Open; Close; Settled };
 type Outcome = record {
-  id : nat64;
-  odds : nat64;
+  outcome_id : nat64;
+  odds : nat32;
+  total_amount_staked : nat64;
   description : text;
   total_bets : nat64;
 };
