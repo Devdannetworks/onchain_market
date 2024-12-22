@@ -1,4 +1,4 @@
-name: Rust ICP Project Test
+name: onchain_market
 
 on:
   push:
