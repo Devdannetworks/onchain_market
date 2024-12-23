@@ -52,6 +52,6 @@ service : {
   get_an_event : (nat64) -> (Result_1) query;
   list_all_events : () -> (vec Event) query;
   list_events_by_category : (text) -> (vec Event) query;
-  place_bet : (BetPayload) -> (Result_2) query;
+  place_bet : (BetPayload) -> (Result_2);
   update_event : (nat64, EventPayload) -> (Result_1);
 }

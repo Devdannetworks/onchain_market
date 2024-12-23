@@ -4,7 +4,7 @@ use crate::storage::event_store::get_event_storage;
 use crate::utils::errors::Error;
 use ic_cdk;
 
-#[ic_cdk::query]
+#[ic_cdk::update]
 pub fn place_bet(bet_payload: BetPayload) -> Result<(), Error> {
     let event_storage_ref = get_event_storage();
 
