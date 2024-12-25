@@ -93,20 +93,39 @@ pub fn get_an_event(id: u64) -> Result<Event, Error> {
         })
 }
 
-/// Update an existing event with validation
+/// Update the details of an existing event
 #[ic_cdk::update]
 pub fn update_event(id: u64, update_payload: EventPayload) -> Result<Event, Error> {
+    // Validate payload data
+    if update_payload.title.is_empty() {
+        return Err(Error::InvalidInput {
+            msg: "Event title cannot be empty.".to_string(),
+        });
+    }
+    if update_payload.category.is_empty() {
+        return Err(Error::InvalidInput {
+            msg: "Event category cannot be empty.".to_string(),
+        });
+    }
+    if update_payload.close_time.is_empty() {
+        return Err(Error::InvalidInput {
+            msg: "Close time cannot be empty.".to_string(),
+        });
+    }
+
     get_event_storage().with(|storage| {
         let mut storage_ref = storage.borrow_mut();
 
+        // Retrieve the event to update
         if let Some(event) = storage_ref.get(&id) {
+            // Ensure the event is not settled
             if event.event_status == EventStatus::Settled {
                 return Err(Error::Authorization {
                     msg: "Cannot update a settled event.".to_string(),
                 });
             }
 
-            // Create the updated event object
+            // Update the event details
             let mut updated_event = event.clone();
             updated_event.title = update_payload.title;
             updated_event.description = update_payload.description;
@@ -115,7 +134,7 @@ pub fn update_event(id: u64, update_payload: EventPayload) -> Result<Event, Erro
             updated_event.close_time = update_payload.close_time;
             updated_event.updated_at = Some(get_current_time());
 
-            // Save updated event back into the storage
+            // Save the updated event back into the storage
             storage_ref.insert(id, updated_event.clone());
             Ok(updated_event)
         } else {
