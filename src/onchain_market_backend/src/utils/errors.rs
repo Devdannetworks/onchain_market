@@ -6,4 +6,5 @@ pub enum Error {
     NotFound { msg: String },
     Authorization { msg: String },
     InvalidState {msg: String},
+    InvalidInput {msg: String},
 }
