@@ -14,18 +14,17 @@ pub fn get_current_time() -> u64 {
     1638316800 // Mock timestamp for testing
 }
 
-/// Create a new event with validation and error handling
 #[ic_cdk::update]
 pub fn create_event(payload: EventPayload) -> Result<Event, String> {
-    // Validate payload data
-    if payload.title.is_empty() || payload.description.is_empty() || payload.category.is_empty() {
-        return Err("Invalid input: Title, description, and category cannot be empty.".to_string());
+    if payload.title.is_empty()
+        || payload.description.is_empty()
+        || payload.category.is_empty()
+        || payload.outcome.is_empty()
+    {
+        return Err("Invalid input: Fields cannot be empty.".to_string());
     }
-    
-    // Increment event ID counter
+
     let id = increment_event_id_counter().unwrap();
-    
-    // Create the event object
     let new_event = Event {
         event_id: id,
         title: payload.title,
@@ -42,12 +41,50 @@ pub fn create_event(payload: EventPayload) -> Result<Event, String> {
         bet_type: payload.bet_type,
     };
 
-    // Store the event in the storage
     get_event_storage().with(|storage| {
         storage.borrow_mut().insert(new_event.event_id, new_event.clone());
     });
 
     Ok(new_event)
+}
+
+#[ic_cdk::query]
+pub fn calculate_total_stakes(event_id: u64) -> Result<u64, Error> {
+    get_event_storage().with(|storage| {
+        let event = storage.borrow().get(&event_id);
+        if let Some(event) = event {
+            Ok(event.outcome.iter().map(|o| o.total_amount_staked).sum())
+        } else {
+            Err(Error::NotFound {
+                msg: format!("Event with id={} not found", event_id),
+            })
+        }
+    })
+}
+
+#[ic_cdk::update]
+pub fn update_event_status(event_id: u64, status: EventStatus) -> Result<Event, Error> {
+    get_event_storage().with(|storage| {
+        let mut storage_ref = storage.borrow_mut();
+        let event = storage_ref.get(&event_id);
+
+        if let Some(mut event) = event {
+            if event.event_status == EventStatus::Settled {
+                return Err(Error::Authorization {
+                    msg: "Cannot update status of a settled event.".to_string(),
+                });
+            }
+
+            event.event_status = status;
+            event.updated_at = Some(get_current_time());
+            storage_ref.insert(event_id, event.clone());
+            Ok(event)
+        } else {
+            Err(Error::NotFound {
+                msg: format!("Event with id={} not found", event_id),
+            })
+        }
+    })
 }
 
 /// List all events by a specific category
@@ -87,7 +124,7 @@ pub fn list_all_events() -> Vec<Event> {
 #[ic_cdk::query]
 pub fn get_an_event(id: u64) -> Result<Event, Error> {
     // Retrieve event from storage by ID
-    get_event_storage().with(|storage| storage.borrow().get(&id).cloned())
+    get_event_storage().with(|storage| storage.borrow().get(&id))
         .ok_or(Error::NotFound {
             msg: format!("Event with id={} could not be found!", id),
         })
@@ -116,16 +153,13 @@ pub fn update_event(id: u64, update_payload: EventPayload) -> Result<Event, Erro
     get_event_storage().with(|storage| {
         let mut storage_ref = storage.borrow_mut();
 
-        // Retrieve the event to update
         if let Some(event) = storage_ref.get(&id) {
-            // Ensure the event is not settled
             if event.event_status == EventStatus::Settled {
                 return Err(Error::Authorization {
                     msg: "Cannot update a settled event.".to_string(),
                 });
             }
 
-            // Update the event details
             let mut updated_event = event.clone();
             updated_event.title = update_payload.title;
             updated_event.description = update_payload.description;
@@ -134,7 +168,6 @@ pub fn update_event(id: u64, update_payload: EventPayload) -> Result<Event, Erro
             updated_event.close_time = update_payload.close_time;
             updated_event.updated_at = Some(get_current_time());
 
-            // Save the updated event back into the storage
             storage_ref.insert(id, updated_event.clone());
             Ok(updated_event)
         } else {
@@ -144,6 +177,7 @@ pub fn update_event(id: u64, update_payload: EventPayload) -> Result<Event, Erro
         }
     })
 }
+
 
 /// Delete an event by its ID with validation
 #[ic_cdk::update]

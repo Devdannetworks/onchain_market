@@ -6,9 +6,10 @@ type BetPayload = record {
 };
 type BetType = variant { Binary; Multichoice };
 type Error = variant {
+  InvalidInput : record { msg : text };
   Authorization : record { msg : text };
   NotFound : record { msg : text };
-  InvalidState : record { msg : text };
+  StorageError : record { msg : text };
 };
 type Event = record {
   sub_category : text;
@@ -43,15 +44,18 @@ type Outcome = record {
   description : text;
   total_bets : nat64;
 };
-type Result = variant { Ok : Event; Err : text };
-type Result_1 = variant { Ok : Event; Err : Error };
-type Result_2 = variant { Ok; Err : Error };
+type Result = variant { Ok : nat64; Err : Error };
+type Result_1 = variant { Ok : Event; Err : text };
+type Result_2 = variant { Ok : Event; Err : Error };
+type Result_3 = variant { Ok; Err : Error };
 service : {
-  create_event : (EventPayload) -> (Result);
-  delete_event : (nat64, principal) -> (Result_1);
-  get_an_event : (nat64) -> (Result_1) query;
+  calculate_total_stakes : (nat64) -> (Result) query;
+  create_event : (EventPayload) -> (Result_1);
+  delete_event : (nat64, principal) -> (Result_2);
+  get_an_event : (nat64) -> (Result_2) query;
   list_all_events : () -> (vec Event) query;
   list_events_by_category : (text) -> (vec Event) query;
-  place_bet : (BetPayload) -> (Result_2);
-  update_event : (nat64, EventPayload) -> (Result_1);
-};
+  place_bet : (BetPayload) -> (Result_3);
+  update_event : (nat64, EventPayload) -> (Result_2);
+  update_event_status : (nat64, EventStatus) -> (Result_2);
+}
