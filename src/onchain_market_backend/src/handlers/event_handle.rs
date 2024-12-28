@@ -87,11 +87,12 @@ pub fn list_all_events() -> Vec<Event> {
 #[ic_cdk::query]
 pub fn get_an_event(id: u64) -> Result<Event, Error> {
     // Retrieve event from storage by ID
-    get_event_storage().with(|storage| storage.borrow().get(&id).map(|event| event.clone()))
+    get_event_storage().with(|storage| storage.borrow().get(&id).cloned())
         .ok_or(Error::NotFound {
             msg: format!("Event with id={} could not be found!", id),
         })
 }
+
 
 /// Update the details of an existing event
 #[ic_cdk::update]
