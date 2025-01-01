@@ -18,12 +18,13 @@
     "src/onchain_market_frontend"
   ],
   "dependencies": {
-    "@types/react-dom": "^19.0.2",
+    "@types/react-dom": "^18.2.0",
+    "shadcn-ui": "^0.9.4",
     "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "@types/react": "^18.3.18",
+    "@types/react": "^18.2.0",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",

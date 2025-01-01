@@ -1,4 +1,5 @@
 import Container from "../../Components/Container";
+import { Button } from "@/components/ui/button";
 
 const Nav = () => {
   return (
@@ -9,7 +10,9 @@ const Nav = () => {
         </div>
         <h5>Chain market</h5>
       </div>
-      <div></div>
+      <div>
+        <Button>Click me!</Button>
+      </div>
       <div></div>
     </Container>
   );

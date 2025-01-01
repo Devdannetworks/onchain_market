@@ -8,12 +8,14 @@
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
     "build": "tsc && vite build",
-    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
+    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\"",
+    "dev": "vite"
   },
   "dependencies": {
     "@dfinity/agent": "^0.15.7",
     "@dfinity/candid": "^0.15.7",
     "@dfinity/principal": "^0.15.7",
+    "@radix-ui/react-slot": "^1.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.469.0",
@@ -25,8 +27,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^19.0.2",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.0.1",
     "autoprefixer": "^10.4.20",
     "dotenv": "^16.3.1",
@@ -34,7 +36,7 @@
     "sass": "^1.63.6",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.1.3",
-    "vite": "^4.3.9",
+    "vite": "^4.5.5",
     "vite-plugin-environment": "^1.1.3"
   }
 }

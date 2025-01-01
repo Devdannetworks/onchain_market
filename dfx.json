@@ -1,27 +1,12 @@
 {
-  "canisters": {
-    "onchain_market_backend": {
-      "candid": "src/onchain_market_backend/onchain_market_backend.did",
-      "package": "onchain_market_backend",
-      "type": "rust"
-    },
-    "onchain_market_frontend": {
-      "dependencies": [
-        "onchain_market_backend"
-      ],
-      "source": [
-        "src/onchain_market_frontend/dist"
-      ],
-      "type": "assets",
-      "workspace": "onchain_market_frontend"
-    }
-  },
-  "defaults": {
+  "onchain_market_frontend": {
+    "dependencies": ["onchain_market_backend"],
+    "source": ["src/onchain_market_frontend/dist"],
+    "type": "assets",
     "build": {
-      "args": "",
-      "packtool": ""
-    }
-  },
-  "output_env_file": ".env",
-  "version": 1
+      "output": "./dist",
+      "commands": ["npm run build"]
+    },
+    "workspace": "src/onchain_market_frontend"
+  }
 }

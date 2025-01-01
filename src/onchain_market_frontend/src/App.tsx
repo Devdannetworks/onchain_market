@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import Nav from "./Header/Navigation/nav";
 
 function App() {
   const [greeting, setGreeting] = useState("");
@@ -9,9 +11,9 @@ function App() {
       <br />
       <br />
       <form action="#">
-        <label htmlFor="name">Enter your name: &nbsp;</label>
         <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
+        {/* <Button>Click Me!</Button> */}
+        <Nav />
       </form>
       <section id="greeting">{greeting}</section>
     </main>
