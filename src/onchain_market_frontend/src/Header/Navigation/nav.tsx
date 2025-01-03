@@ -32,3 +32,6 @@ const Nav = () => {
 };
 
 export default Nav;
+// Cards bg background:linear-gradient(180deg, #8055FF 0%, #4D19E0 100%)
+// CTA backgrounds bg-[#635BFF]
+// Main section background:linear-gradient(180deg, , 27, 1rgba(1813, 0) 0%, #0E1A88 60.24%, #121E85 100%)
