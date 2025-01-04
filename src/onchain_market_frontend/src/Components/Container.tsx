@@ -2,7 +2,7 @@ import React from "react";
 
 type containerProps = {
   children: React.ReactNode;
-  bg_color: String;
+  bg_color?: String;
 };
 
 const Container: React.FC<containerProps> = ({ children, bg_color }) => {
