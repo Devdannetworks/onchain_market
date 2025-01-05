@@ -119,15 +119,14 @@ const Events = () => {
     },
   ];
   return (
-    <div className="pt-6 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="pt-6 pb-6 gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
       {events.map((event) => (
-        <div className="">
+        <div className="" key={event.title}>
           <Event
             image={event.image}
             title={event.title}
             candidates={event.candidates}
             volume={event.volume}
-            key={event.title}
           />
         </div>
       ))}

@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <div className="bg-[#11122D] min-h-screen pt-4">
       <Container>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 justify-items-between gap-10 space-y-6 pb-3">
+        <div className="pb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 justify-items-between gap-10 space-y-6">
           <div className="flex flex-col space-y-4">
             <div className="h-[65px] w-[240px]">
               <img src={logo} alt="Logo" />
@@ -40,7 +40,20 @@ const Footer = () => {
               <p>Community</p>
               <p>Developers</p>
               <p>Contact</p>
+              <p>Blog</p>
+              <p>FAQS</p>
+              <p></p>
               <p>Learn more...</p>
+            </div>
+          </div>
+          <div>
+            <h4 className="pb-6 font-semibold text-xl">More</h4>
+            <div className="space-y-2 font-mono text-sm opacity-50">
+              <p>Ideas</p>
+              <p>Activity</p>
+              <p>Dashboard</p>
+              <p>Discussions</p>
+              <p>Trending</p>
             </div>
           </div>
           <div>

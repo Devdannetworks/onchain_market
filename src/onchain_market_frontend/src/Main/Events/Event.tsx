@@ -14,10 +14,10 @@ interface candidates_details {
   candidate_name: string;
   percentage_vote: number;
 }
-
+//
 const Event: React.FC<eventProps> = ({ image, title, candidates, volume }) => {
   return (
-    <div className="p-3 rounded-md bg-gradient-to-b from-[#8055FF] to-[#4D19E0]">
+    <div className="pt-6 pb-6 pr-4 pl-4 rounded-md bg-[#212348a1] space-y-4">
       <div className="cursor-pointer pb-4 flex justify-between space-x-3 text-sm font-semibold items-start">
         <div className="w-[100px]">
           <img
@@ -26,7 +26,7 @@ const Event: React.FC<eventProps> = ({ image, title, candidates, volume }) => {
             className="object-cover border border-2px"
           />
         </div>
-        <h6>{title}</h6>
+        <h6 className="font-semibold text-[16px]">{title}</h6>
       </div>
 
       {candidates.map((candidate) => (

@@ -37,12 +37,12 @@ const Categories = () => {
   ];
 
   return (
-    <div className="bg-[#11122D] flex flex-col justify-center items-center pt-2 pb-2">
-      <div className="flex justify-between items-center max-w-[1400px] w-full text-white">
+    <div className="bg-[#11122D] flex flex-col justify-center items-center pt-2 pb-2 ">
+      <div className="flex justify-between items-center max-w-[1400px] text-white w-[95%]">
         {categories.map((category) => (
           <div
             key={category.name}
-            className="flex gap-1 items-center text-sm font-light"
+            className="flex gap-2 items-center text-sm font-light"
           >
             <category.icon size={18} />
             {category.name}
