@@ -37,15 +37,15 @@ const Categories = () => {
   ];
 
   return (
-    <div className="bg-[#11122D] flex flex-col justify-center items-center pt-2 pb-2 ">
-      <div className="flex justify-between items-center max-w-[1400px] text-white w-[95%]">
+    <div className="bg-[#11122D] flex flex-col justify-center items-center py-4 ">
+      <div className="flex justify-between items-center max-w-[1400px] text-white w-[95%] overflow-x-scroll scrollbar-hide gap-8">
         {categories.map((category) => (
           <div
             key={category.name}
             className="flex gap-2 items-center text-sm font-light"
           >
             <category.icon size={18} />
-            {category.name}
+            <h5 className="whitespace-nowrap">{category.name}</h5>
           </div>
         ))}
       </div>

@@ -35,6 +35,8 @@ const Nav = () => {
             </div>
           </div>
         </Container>
+        <hr className="border-t border-gray-600 opacity-50" />
+
         <Categories />
       </div>
       <div>

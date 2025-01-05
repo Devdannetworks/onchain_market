@@ -67,4 +67,12 @@
 .text {
   background-color: #171834e5;
 }
-/* bg-[#11122D] */
+
+/* Hide scrollbars for all browsers */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
