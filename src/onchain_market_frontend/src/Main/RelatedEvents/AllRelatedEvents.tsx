@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { events } from "../Events/Events";
 import RelatedEvents from "./RelatedEvents";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const AllRelatedEvents = () => {
   const [visibleCount, setVisibleCount] = useState(3);
