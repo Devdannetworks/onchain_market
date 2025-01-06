@@ -4,18 +4,21 @@ import logo1 from "@/images/logo.svg";
 import Search from "@/Components/Search";
 import Categories from "./Categories/Categories";
 import Drawer from "./Drawer/Drawer";
+import { useNavigate } from "react-router-dom";
 
 const Nav = () => {
+  const navigate = useNavigate();
   return (
     <div>
-      <div className="hidden md:flex flex-col">
+      <div className="hidden md:flex flex-col shadow-lg">
         <Container bg_color={"bg-[#11122D]"}>
           <div className="flex justify-between items-center ">
             <div className=" flex items-center h-[65px] w-[240px]">
               <img
                 src={logo1}
-                alt="Chain market logo"
-                className="object-cover  p-4"
+                alt="Chain market logo "
+                className="object-cover  p-4 cursor-pointer"
+                onClick={() => navigate("/")}
               />
             </div>
             <div>
@@ -35,7 +38,7 @@ const Nav = () => {
             </div>
           </div>
         </Container>
-        <hr className="border-t border-gray-600 opacity-50" />
+        <hr className="border-t border-gray-600 opacity-40" />
 
         <Categories />
       </div>

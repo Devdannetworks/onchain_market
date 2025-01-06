@@ -2,23 +2,28 @@ import { CiBookmarkCheck, CiBookmark, CiChat1 } from "react-icons/ci";
 import { AiOutlineTransaction } from "react-icons/ai";
 import React from "react";
 import Candidate from "./Candidate";
+import { eventProps } from "@/Types/Types";
+import { useNavigate } from "react-router-dom";
 
-interface eventProps {
-  image: string;
-  title: string;
-  candidates: candidates_details[];
-  volume: number;
-}
-
-interface candidates_details {
-  candidate_name: string;
-  percentage_vote: number;
-}
 //
-const Event: React.FC<eventProps> = ({ image, title, candidates, volume }) => {
+const Event: React.FC<eventProps> = ({
+  image,
+  title,
+  candidates,
+  volume,
+  id,
+}) => {
+  const navigate = useNavigate();
+  const showEventPage = (id: number) => {
+    navigate(`/event/${id}`);
+  };
+
   return (
-    <div className="pt-6 pb-6 pr-4 pl-4 rounded-md bg-[#212348a1] space-y-4">
-      <div className="cursor-pointer pb-4 flex justify-between space-x-3 text-sm font-semibold items-start">
+    <div className="pt-6 pb-6 pr-4 pl-4 rounded-md bg-[#212348a1] space-y-4 shadow-md">
+      <div
+        className="cursor-pointer pb-4 flex justify-between space-x-3 text-sm font-semibold items-start"
+        onClick={() => showEventPage(id)}
+      >
         <div className="w-[100px]">
           <img
             src={image}

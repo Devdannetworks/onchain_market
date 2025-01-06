@@ -27,6 +27,7 @@ const Footer = () => {
             <div className="space-y-2 font-mono text-sm opacity-50">
               <p>All</p>
               <p>New</p>
+              <p>Trending</p>
               <p>Politics</p>
               <p>Sports</p>
               <p>Pop culture</p>
@@ -42,8 +43,9 @@ const Footer = () => {
               <p>Contact</p>
               <p>Blog</p>
               <p>FAQS</p>
-              <p></p>
-              <p>Learn more...</p>
+              <p>Regulations</p>
+              <p>How to Bet</p>
+              <p>Help center...</p>
             </div>
           </div>
           <div>
@@ -53,7 +55,8 @@ const Footer = () => {
               <p>Activity</p>
               <p>Dashboard</p>
               <p>Discussions</p>
-              <p>Trending</p>
+              <p>Prohibitions</p>
+              <p>Trading hours</p>
             </div>
           </div>
           <div>
