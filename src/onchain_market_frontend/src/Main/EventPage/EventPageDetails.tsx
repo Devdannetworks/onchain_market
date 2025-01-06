@@ -1,9 +1,10 @@
 import { eventProps } from "@/Types/Types";
-import React from "react";
+import React, { useState } from "react";
 import Candidate from "./Candidate";
 import logo from "@/images/logo.svg";
 import { IoIosArrowDown } from "react-icons/io";
 import AllRelatedEvents from "../RelatedEvents/AllRelatedEvents";
+import Comments from "./Comments";
 
 const EventPageDetails: React.FC<eventProps> = ({
   image,
@@ -11,6 +12,23 @@ const EventPageDetails: React.FC<eventProps> = ({
   candidates,
   volume,
 }) => {
+  const [selected, setSelected] = useState("Comments");
+
+  const renderContent = () => {
+    switch (selected) {
+      case "Comments":
+        return (
+          <div>
+            {" "}
+            <Comments />
+          </div>
+        );
+      case "Activity":
+        return <div>Recent Activity</div>;
+      case "Top Holders":
+        return <div>Top Holders</div>;
+    }
+  };
   return (
     <div className="block lg:flex  justify-between gap-4 py-[50px] w-full ">
       <div className=" flex flex-col gap-6  w-full ">
@@ -75,6 +93,43 @@ const EventPageDetails: React.FC<eventProps> = ({
           <div>
             <AllRelatedEvents />
           </div>
+        </div>
+        <hr className="border-gray-500 max-w-[400px]" />
+
+        <div>
+          <div className="flex text-xl font-semibold gap-6 ">
+            <h4
+              className={`${
+                selected == "Comments"
+                  ? "opacity-100 text-white"
+                  : "text-gray-500 opacity-50"
+              } cursor-pointer`}
+              onClick={() => setSelected("Comments")}
+            >
+              Comments
+            </h4>
+            <h4
+              className={`${
+                selected == "Activity"
+                  ? "opacity-100 text-white"
+                  : "text-gray-500 opacity-50"
+              } cursor-pointer`}
+              onClick={() => setSelected("Activity")}
+            >
+              Activity
+            </h4>
+            <h4
+              className={`${
+                selected == "Top Holders"
+                  ? "opacity-100 text-white"
+                  : "text-gray-500 opacity-50"
+              } cursor-pointer`}
+              onClick={() => setSelected("Top Holders")}
+            >
+              Top Holders
+            </h4>
+          </div>
+          <div>{renderContent()}</div>
         </div>
       </div>
       <div className="sm:mt-6 md:mt-6 h-[500px] w-[400px] bg-[#212348a1] shadow-lg rounded-md border-1 border-slate-500 p-4">
