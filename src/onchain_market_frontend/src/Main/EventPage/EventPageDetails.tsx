@@ -5,6 +5,7 @@ import logo from "@/images/logo.svg";
 import { IoIosArrowDown } from "react-icons/io";
 import AllRelatedEvents from "../RelatedEvents/AllRelatedEvents";
 import Comments from "./Comments";
+import Outcome from "./Outcome";
 
 const EventPageDetails: React.FC<eventProps> = ({
   image,
@@ -19,7 +20,6 @@ const EventPageDetails: React.FC<eventProps> = ({
       case "Comments":
         return (
           <div>
-            {" "}
             <Comments />
           </div>
         );
@@ -58,9 +58,30 @@ const EventPageDetails: React.FC<eventProps> = ({
               <img src={logo} alt="Cjainmarket logo" className="object-cover" />
             </div>
           </div>
-          <div>Chart</div>
+          <div className="pb-8">Chart</div>
+          <div>
+            <div className="">
+              <div className="flex justify-between items-center text-sm font-light py-4 px-2 shadow-md">
+                <p className="w-[40%]">Outcome</p>
+
+                <div className="flex gap-8 items-center justify-between w-[50%]">
+                  <p>%Chance</p>
+                  <p>${volume} vol</p>
+                </div>
+              </div>
+              <div className=" ">
+                {candidates.map((candidate) => (
+                  <Outcome
+                    name={candidate.candidate_name}
+                    percentage_vote={candidate.percentage_vote}
+                  />
+                ))}
+              </div>
+            </div>
+            <div></div>
+          </div>
         </div>
-        <hr className="border-gray-500 max-w-[400px]" />
+        {/* <hr className="border-gray-500 max-w-[400px]" /> */}
         <div className="border border-gray-500 p-4 rounded-lg">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-semibold">OrderBook</h2>
