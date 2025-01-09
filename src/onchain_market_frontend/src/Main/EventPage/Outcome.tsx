@@ -9,15 +9,19 @@ interface OutcomeProps {
 
 const Outcome: React.FC<OutcomeProps> = ({ name, percentage_vote }) => {
   return (
-    <div className="">
-      <div className="flex justify-between w-full py-4 px-2 shadow-md">
-        <div className="w-[30%]">{name}</div>
+    <div className="w-full">
+      <div className="flex flex-col md:flex-row justify-between items-center w-full py-4 px-2 shadow-md gap-4">
+        <div className="w-full md:w-[30%] text-center md:text-left">{name}</div>
 
-        <div className="flex gap-8 w-[50%] justify-between items-center">
-          <div className="">{percentage_vote}%</div>
-          <div className="flex gap-4 items-center ">
-            <Button className="bg-[#70d460]">Yes {percentage_vote}</Button>
-            <Button className="bg-[#17412d]">No {100 - percentage_vote}</Button>
+        <div className="flex flex-col md:flex-row gap-4 w-full md:w-[50%] justify-between items-center">
+          <div className="text-center md:text-left">{percentage_vote}%</div>
+          <div className="flex gap-4 justify-center items-center">
+            <Button className="bg-[#70d460] px-4 py-2">
+              Yes {percentage_vote}
+            </Button>
+            <Button className="bg-[#17412d] px-4 py-2">
+              No {100 - percentage_vote}
+            </Button>
           </div>
         </div>
       </div>
@@ -27,6 +31,3 @@ const Outcome: React.FC<OutcomeProps> = ({ name, percentage_vote }) => {
 };
 
 export default Outcome;
-
-//#70d460
-//#17412d

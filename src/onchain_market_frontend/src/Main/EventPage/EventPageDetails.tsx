@@ -6,6 +6,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import AllRelatedEvents from "../RelatedEvents/AllRelatedEvents";
 import Comments from "./Comments";
 import Outcome from "./Outcome";
+import EventCard from "./Card";
 
 const EventPageDetails: React.FC<eventProps> = ({
   image,
@@ -44,8 +45,8 @@ const EventPageDetails: React.FC<eventProps> = ({
         </div>
         <hr className="border-gray-500 max-w-[400px]" />
         <div>
-          <div className="flex justify-between items-center gap-8 w-full ">
-            <div className="flex items-center justify-between gap-6">
+          <div className="flex md:justify-between items-center gap-8 w-full ">
+            <div className="block  md:flex items-center justify-between md:gap-6  jus">
               {candidates.map((candidate) => (
                 <Candidate
                   key={candidate.candidate_name}
@@ -58,7 +59,7 @@ const EventPageDetails: React.FC<eventProps> = ({
               <img src={logo} alt="Cjainmarket logo" className="object-cover" />
             </div>
           </div>
-          <div className="pb-8">Chart</div>
+          <div className="py-8">Chart</div>
           <div>
             <div className="">
               <div className="flex justify-between items-center text-sm font-light py-4 px-2 shadow-md">
@@ -153,9 +154,13 @@ const EventPageDetails: React.FC<eventProps> = ({
           <div>{renderContent()}</div>
         </div>
       </div>
-      <div className="sm:mt-6 md:mt-6 h-[500px] w-[400px] bg-[#212348a1] shadow-lg rounded-md border-1 border-slate-500 p-4">
-        Hello there
-      </div>
+
+      <EventCard
+        image={image}
+        candidate_name={candidates[0].candidate_name}
+        title={title}
+        classes="m:mt-6 md:mt-6 h-[500px]  bg-[#212348a1] shadow-lg rounded-md border-1 border-slate-500 p-4"
+      />
     </div>
   );
 };
