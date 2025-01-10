@@ -5,6 +5,15 @@ import { CiCircleAlert } from "react-icons/ci";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { truncateText } from "@/Utils/Function";
+import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface EventCardProps {
   image: string;
@@ -19,6 +28,8 @@ const EventCard: React.FC<EventCardProps> = ({
   title,
   classes,
 }) => {
+  const [selected, setSelected] = useState("Buy");
+
   return (
     <Card
       className={`flex flex-col justify-between sm:min-w-full  md:min-w-[350px] text-white ${classes}`}
@@ -37,12 +48,37 @@ const EventCard: React.FC<EventCardProps> = ({
       </div>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <CardDescription>Buy</CardDescription>
-          <CardDescription>Sell</CardDescription>
+          <CardDescription
+            className={`${
+              selected == "Buy" ? "font-bold text-white underline" : ""
+            } cursor-pointer`}
+            onClick={() => setSelected("Buy")}
+          >
+            Buy
+          </CardDescription>
+          <CardDescription
+            className={`${
+              selected == "Sell" ? "font-bold text-white underline" : ""
+            } cursor-pointer`}
+            onClick={() => setSelected("Sell")}
+          >
+            Sell
+          </CardDescription>
         </div>
-        <div className="flex items-center gap-4 border border-r-2 border-slate-400 p-2 rounded-md">
-          <CardTitle>Markets</CardTitle>
-          <RiArrowDropDownLine />
+        <div className="flex items-center gap-4 border border-r-2 border-slate-400 p-2 rounded-md cursor-pointer">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex space-x-3 click*:border-none items-center">
+              Markets <RiArrowDropDownLine size={24} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>Team</DropdownMenuItem>
+              <DropdownMenuItem>Subscription</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className="flex flex-col gap-4">
@@ -83,7 +119,7 @@ const EventCard: React.FC<EventCardProps> = ({
         </div>
       </div>
 
-      <Button className="w-full bg-gradient-to-b from-[#8055FF] to-[#4D19E0]">
+      <Button className="w-full bg-gradient-to-b from-[#8055FF] to-[#4D19E0] ">
         Buy
       </Button>
     </Card>
