@@ -43,6 +43,10 @@ import path from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  define: {
+    global: {},
+    "process.env": {}, // Polyfill process.env
+  },
   root: "./", // Ensure the root is your frontend source directory
   server: {
     port: 3000, // You can set any port you like
@@ -61,32 +65,3 @@ export default defineConfig({
     },
   },
 });
-
-//dfx.json configuration
-// {
-//   "canisters": {
-//     "onchain_market_backend": {
-//       "candid": "src/onchain_market_backend/onchain_market_backend.did",
-//       "package": "onchain_market_backend",
-//       "type": "rust"
-//     },
-//     "onchain_market_frontend": {
-//       "dependencies": [
-//         "onchain_market_backend"
-//       ],
-//       "source": [
-//         "src/onchain_market_frontend/dist"
-//       ],
-//       "type": "assets",
-//       "workspace": "onchain_market_frontend"
-//     }
-//   },
-//   "defaults": {
-//     "build": {
-//       "args": "",
-//       "packtool": ""
-//     }
-//   },
-//   "output_env_file": ".env",
-//   "version": 1
-// }

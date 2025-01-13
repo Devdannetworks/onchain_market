@@ -55,4 +55,5 @@ service : {
   list_events_by_category : (text) -> (vec Event) query;
   place_bet : (BetPayload) -> (Result_2);
   update_event : (nat64, EventPayload) -> (Result_1);
+  whoami : () -> (principal) query;
 }

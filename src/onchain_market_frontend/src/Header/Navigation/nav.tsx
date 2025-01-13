@@ -5,9 +5,16 @@ import Search from "@/Components/Search";
 import Categories from "./Categories/Categories";
 import Drawer from "./Drawer/Drawer";
 import { useNavigate } from "react-router-dom";
+import { useInternetIdentity } from "ic-use-internet-identity";
 
 const Nav = () => {
   const navigate = useNavigate();
+  const { login, loginStatus } = useInternetIdentity();
+  const disabled = loginStatus === "logging-in" || loginStatus === "success";
+  const text = loginStatus === "logging-in" ? "Logging in..." : "Login";
+
+  const handleWhoAmi = async () => {};
+
   return (
     <div>
       <div className="hidden md:flex flex-col shadow-lg">
@@ -26,14 +33,18 @@ const Nav = () => {
             </div>
 
             <div className="flex  items-center text-center space-x-6">
-              <Button className="border-white border bg-transparent">
+              <Button
+                className="border-white border bg-transparent"
+                onClick={handleWhoAmi}
+              >
                 Sign up
               </Button>
               <Button
                 variant="secondary"
                 className="bg-gradient-to-b from-[#8055FF] to-[#4D19E0] text-white px-4 py-2"
+                onClick={login}
               >
-                Log in
+                {text}
               </Button>
             </div>
           </div>
@@ -50,7 +61,3 @@ const Nav = () => {
 };
 
 export default Nav;
-
-// Cards bg background:linear-gradient(180deg, #8055FF 0%, #4D19E0 100%)
-// CTA backgrounds bg-[#635BFF]
-// Main section background:linear-gradient(180deg, , 27, 1rgba(1813, 0) 0%, #0E1A88 60.24%, #121E85 100%)
